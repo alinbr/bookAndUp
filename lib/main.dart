@@ -13,9 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Books App and Up',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: ThemeData(),
         home: const HomePage());
   }
 }
