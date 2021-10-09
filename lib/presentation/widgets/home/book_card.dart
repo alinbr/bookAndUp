@@ -3,26 +3,30 @@ import 'package:flutter/widgets.dart';
 
 class BookCard extends StatelessWidget {
   final String imageUrl;
-  final String author;
+  final List<String> authors;
   final String title;
-  final String rating;
-  final String category;
+  final double rating;
+  final List<String> categories;
 
   const BookCard(
       {Key? key,
       required this.imageUrl,
-      required this.author,
+      required this.authors,
       required this.title,
       required this.rating,
-      required this.category})
+      required this.categories})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String authorsLabel =
+        authors.isNotEmpty ? "by " + authors.join(", ") : "unkown author";
+    String? chipLabel = categories.isNotEmpty ? categories[0] : null;
+
     return Container(
       height: 180,
       padding: const EdgeInsets.all(8),
-      margin: const EdgeInsets.only(bottom: 32),
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -35,31 +39,17 @@ class BookCard extends StatelessWidget {
           ]),
       child: Row(
         children: [
-          Container(
-            width: 120,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(16),
-              image: DecorationImage(
-                image: NetworkImage(imageUrl),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 16,
-          ),
+          CoverImage(imageUrl: imageUrl),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Text(
-                    "by $author",
-                    style: Theme.of(context).textTheme.caption,
-                  ),
+                Text(
+                  authorsLabel,
+                  style: Theme.of(context).textTheme.caption,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -69,44 +59,73 @@ class BookCard extends StatelessWidget {
                         .textTheme
                         .subtitle1!
                         .copyWith(fontWeight: FontWeight.bold),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.star,
-                        color: Color(0xFFFEB749),
-                        size: 12,
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        rating,
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.star,
+                      color: Color(0xFFFEB749),
+                      size: 12,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      rating != 0.0 ? rating.toString() : "n/a",
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Chip(
+                if (chipLabel != null)
+                  Chip(
                       backgroundColor: const Color(0xFF9DDCFF),
                       label: Text(
-                        category,
+                        chipLabel,
                         style: Theme.of(context)
                             .textTheme
                             .caption!
                             .copyWith(color: const Color(0xFF14A4FF)),
-                      )),
-                )
+                      ))
               ],
             ),
           )
         ],
       ),
+    );
+  }
+}
+
+class CoverImage extends StatelessWidget {
+  const CoverImage({
+    Key? key,
+    required this.imageUrl,
+  }) : super(key: key);
+
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 120,
+      margin: const EdgeInsets.only(right: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        image: imageUrl != ""
+            ? DecorationImage(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              )
+            : null,
+      ),
+      child: imageUrl == ""
+          ? const Center(
+              child: Icon(
+              Icons.book,
+              color: Colors.grey,
+            ))
+          : Container(),
     );
   }
 }

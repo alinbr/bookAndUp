@@ -11,15 +11,28 @@ final booksProvider =
 class BookController extends StateNotifier<AsyncValue<List<Book>>> {
   final BaseBookRepository _repository;
 
+  bool showingSearchResults = false;
+
   BookController(this._repository) : super(const AsyncValue.loading()) {
     retrieveItems();
   }
 
   Future<void> retrieveItems() async {
     state = const AsyncValue.loading();
-
+    showingSearchResults = false;
     try {
-      final items = await _repository.retrieveBooks();
+      final items = await _repository.getPopularBooks();
+      state = AsyncValue.data(items);
+    } on Exception catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  Future<void> search(String input) async {
+    state = const AsyncValue.loading();
+    showingSearchResults = true;
+    try {
+      final items = await _repository.search(input);
       state = AsyncValue.data(items);
     } on Exception catch (e, st) {
       state = AsyncValue.error(e, st);

@@ -9,14 +9,16 @@ final bookRepository = Provider<BaseBookRepository>((ref) {
 });
 
 abstract class BaseBookRepository {
-  Future<List<Book>> retrieveBooks();
+  Future<List<Book>> getPopularBooks();
+  Future<List<Book>> search(String input);
 }
 
 class BookRepository implements BaseBookRepository {
+  final String baseUrl = 'https://www.googleapis.com/books/v1/volumes?q=';
+
   @override
-  Future<List<Book>> retrieveBooks() async {
-    var q =
-        'https://www.googleapis.com/books/v1/volumes?q=' + 'punguta+cu+2+bani';
+  Future<List<Book>> getPopularBooks() async {
+    var q = baseUrl + 'morometii';
 
     final result = await http.get(Uri.parse(q));
 
@@ -24,9 +26,28 @@ class BookRepository implements BaseBookRepository {
       final books = <Book>[];
       final list = (jsonDecode(result.body))['items'] as List<dynamic>?;
       if (list == null) return [];
-      list.forEach((e) {
+      for (var e in list) {
         books.add(Book.fromJson(e));
-      });
+      }
+      return books;
+    } else {
+      throw (result.body);
+    }
+  }
+
+  @override
+  Future<List<Book>> search(String input) async {
+    var q = baseUrl + input.trim().replaceAll(' ', '+');
+
+    final result = await http.get(Uri.parse(q));
+
+    if (result.statusCode == 200) {
+      final books = <Book>[];
+      final list = (jsonDecode(result.body))['items'] as List<dynamic>?;
+      if (list == null) return [];
+      for (var e in list) {
+        books.add(Book.fromJson(e));
+      }
       return books;
     } else {
       throw (result.body);

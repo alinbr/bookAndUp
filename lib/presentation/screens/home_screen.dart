@@ -16,65 +16,82 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: double.infinity,
-          child: books.when(
-              data: (data) => ListView.builder(
-                    physics: const ClampingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 24,
-                              ),
-                              const Text("Explore thousands of books on the go",
-                                  style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.black)),
-                              const SizedBox(height: 32),
-                              const SearchBox(),
-                              const SizedBox(height: 32),
-                              Container(
-                                width: double.infinity,
-                                child: const Text("Famous Books",
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w800,
-                                        color: Colors.black)),
-                              ),
-                              const SizedBox(
-                                height: 24,
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        child: BookCard(
-                            imageUrl: data[index - 1].image,
-                            author: data[index - 1].authors.isNotEmpty
-                                ? data[index - 1].authors[0]
-                                : "",
-                            title: data[index - 1].title,
-                            rating: data[index - 1].averageRating.toString(),
-                            category: data[index - 1].categories.isNotEmpty
-                                ? data[index - 1].categories[0]
-                                : ""),
-                      );
-                    },
-                    itemCount: data.length + 1,
+        child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: double.infinity,
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 22,
+                      ),
+                      const Text("Explore thousands of books on the go",
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black)),
+                      const SearchBox(),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                            watch(booksProvider.notifier).showingSearchResults
+                                ? "Results:"
+                                : "Famous Books",
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black)),
+                      )
+                    ],
                   ),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (_, __) => Text("some error")),
-        ),
+                ),
+                Expanded(
+                    child: ShaderMask(
+                  shaderCallback: (Rect rect) {
+                    return const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.white,
+                        Colors.transparent,
+                      ],
+                      stops: [0.0, 0.03],
+                    ).createShader(rect);
+                  },
+                  blendMode: BlendMode.dstOut,
+                  child: Container(
+                    child: books.when(
+                        data: (data) {
+                          if (data.isEmpty) {
+                            return const Center(
+                              child: Text("No results found!"),
+                            );
+                          }
+
+                          return ListView.builder(
+                            physics: const ClampingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return BookCard(
+                                  imageUrl: data[index].image,
+                                  authors: data[index].authors,
+                                  title: data[index].title,
+                                  rating: data[index].averageRating,
+                                  categories: data[index].categories);
+                            },
+                            itemCount: data.length,
+                          );
+                        },
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        error: (_, __) => const Text("some error")),
+                  ),
+                )),
+              ],
+            )),
       ),
     );
   }
