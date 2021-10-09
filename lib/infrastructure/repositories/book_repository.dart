@@ -18,11 +18,13 @@ class BookRepository implements BaseBookRepository {
 
   @override
   Future<List<Book>> getPopularBooks() async {
-    var q = baseUrl + 'morometii';
+    var q = baseUrl + 'ernist hem';
 
-    final result = await http.get(Uri.parse(q));
-
-    if (result.statusCode == 200) {
+    try {
+      final result = await http.get(Uri.parse(q));
+      if (result.statusCode != 200) {
+        throw Exception(result.body);
+      }
       final books = <Book>[];
       final list = (jsonDecode(result.body))['items'] as List<dynamic>?;
       if (list == null) return [];
@@ -30,8 +32,8 @@ class BookRepository implements BaseBookRepository {
         books.add(Book.fromJson(e));
       }
       return books;
-    } else {
-      throw (result.body);
+    } on Exception catch (e) {
+      throw Exception(e);
     }
   }
 
@@ -39,9 +41,11 @@ class BookRepository implements BaseBookRepository {
   Future<List<Book>> search(String input) async {
     var q = baseUrl + input.trim().replaceAll(' ', '+');
 
-    final result = await http.get(Uri.parse(q));
-
-    if (result.statusCode == 200) {
+    try {
+      final result = await http.get(Uri.parse(q));
+      if (result.statusCode != 200) {
+        throw Exception(result.body);
+      }
       final books = <Book>[];
       final list = (jsonDecode(result.body))['items'] as List<dynamic>?;
       if (list == null) return [];
@@ -49,8 +53,8 @@ class BookRepository implements BaseBookRepository {
         books.add(Book.fromJson(e));
       }
       return books;
-    } else {
-      throw (result.body);
+    } on Exception catch (e) {
+      throw Exception(e);
     }
   }
 }

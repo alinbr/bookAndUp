@@ -23,8 +23,8 @@ class BookController extends StateNotifier<AsyncValue<List<Book>>> {
     try {
       final items = await _repository.getPopularBooks();
       state = AsyncValue.data(items);
-    } on Exception catch (e, st) {
-      state = AsyncValue.error(e, st);
+    } on Exception catch (e) {
+      state = AsyncValue.error(e);
     }
   }
 

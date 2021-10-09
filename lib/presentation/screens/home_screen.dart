@@ -25,27 +25,25 @@ class HomeScreen extends ConsumerWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
-                      const SizedBox(
-                        height: 22,
-                      ),
-                      const Text("Explore thousands of books on the go",
-                          style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.black)),
-                      const SearchBox(),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                            watch(booksProvider.notifier).showingSearchResults
-                                ? "Results:"
-                                : "Famous Books",
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                                fontSize: 20,
+                      const Padding(
+                        padding: EdgeInsets.only(top: 22),
+                        child: Text("Explore thousands of books on the go",
+                            style: TextStyle(
+                                fontSize: 24,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.black)),
-                      )
+                      ),
+                      const SearchBox(),
+                      if (!watch(booksProvider.notifier).showingSearchResults)
+                        const SizedBox(
+                          width: double.infinity,
+                          child: Text("Famous Books",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black)),
+                        )
                     ],
                   ),
                 ),
@@ -87,7 +85,10 @@ class HomeScreen extends ConsumerWidget {
                         },
                         loading: () =>
                             const Center(child: CircularProgressIndicator()),
-                        error: (_, __) => const Text("some error")),
+                        error: (_, __) => const Center(
+                              child:
+                                  Text("Unexpected error. Please try again!"),
+                            )),
                   ),
                 )),
               ],
