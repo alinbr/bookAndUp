@@ -66,18 +66,34 @@ class BookCard extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    rating,
-                    style: Theme.of(context).textTheme.caption,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.star,
+                        color: Color(0xFFFEB749),
+                        size: 12,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        rating,
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Chip(
+                      backgroundColor: const Color(0xFF9DDCFF),
                       label: Text(
-                    category,
-                    style: Theme.of(context).textTheme.caption,
-                  )),
+                        category,
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption!
+                            .copyWith(color: const Color(0xFF14A4FF)),
+                      )),
                 )
               ],
             ),

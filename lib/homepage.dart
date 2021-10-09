@@ -1,4 +1,5 @@
 import 'package:books_app_up/book_card.dart';
+import 'package:books_app_up/search_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,50 +14,26 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
-            margin: const EdgeInsets.all(16),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
+                const SizedBox(
+                  height: 24,
+                ),
                 const Text("Explore thousands of books on the go",
                     style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.black)),
-                const SizedBox(
-                  height: 32,
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(32),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        icon: Icon(CupertinoIcons.search),
-                        hintText: 'Search for books...'),
-                    maxLines: 1,
-                  ),
-                ),
-                SizedBox(
-                  height: 32,
-                ),
+                const SizedBox(height: 32),
+                const SearchBox(),
+                const SizedBox(height: 32),
                 Container(
                   width: double.infinity,
                   child: const Text("Famous Books",
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black)),
                 ),
