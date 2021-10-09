@@ -1,4 +1,7 @@
-import 'package:books_app_up/application/book_controller.dart';
+import 'package:books_app_up/application/home_controller.dart';
+import 'package:books_app_up/application/home_state.dart';
+import 'package:books_app_up/infrastructure/dtos/book.dart';
+import 'package:books_app_up/presentation/screens/search_screen.dart';
 import 'package:books_app_up/presentation/widgets/home/book_card.dart';
 import 'package:books_app_up/presentation/widgets/home/search_box.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,30 +15,104 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final books = watch(booksProvider);
+    final home = watch(homeProvider);
 
+    if (home is HomeStateLoading) {
+      return buildInitialStateLoading(context);
+    } else if (home is HomeStateLoaded) {
+      return buildInitialStateLoaded(context, home.books);
+    } else if (home is HomeStateSearching) {
+      return buildSearchingState(context);
+    } else if (home is HomeStateSearchResults) {
+      return buildSearchResultsState(context, home.books);
+    } else if (home is HomeStateEmptySearch) {
+      return buildSearchReadyState(context);
+    } else {
+      return const SizedBox.shrink();
+    }
+  }
+
+  Widget buildInitialStateLoaded(BuildContext context, List<Book> books) {
     return Scaffold(
-      body: SafeArea(
-        child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 22),
-                        child: Text("Explore thousands of books on the go",
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.black)),
-                      ),
-                      const SearchBox(),
-                      if (!watch(booksProvider.notifier).showingSearchResults)
-                        const SizedBox(
+        body: SafeArea(
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: Column(children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(top: 22, bottom: 32),
+                          child: Text("Explore thousands of books on the go",
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black)),
+                        ),
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchPage()),
+                              );
+                            },
+                            child: Hero(child: SearchBox(), tag: "search")),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 32),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text("Famous Books",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.black)),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                      child: Center(
+                          child: ListView.builder(
+                    physics: const ClampingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return BookCard(
+                          imageUrl: books[index].image,
+                          authors: books[index].authors,
+                          title: books[index].title,
+                          rating: books[index].averageRating,
+                          categories: books[index].categories);
+                    },
+                    itemCount: books.length,
+                  )))
+                ]))));
+  }
+
+  Widget buildInitialStateLoading(BuildContext context) {
+    return Scaffold(
+        body: SafeArea(
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: Column(children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.only(top: 22),
+                          child: Text("Explore thousands of books on the go",
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black)),
+                        ),
+                        SearchBox(),
+                        SizedBox(
                           width: double.infinity,
                           child: Text("Famous Books",
                               textAlign: TextAlign.left,
@@ -44,56 +121,75 @@ class HomeScreen extends ConsumerWidget {
                                   fontWeight: FontWeight.w800,
                                   color: Colors.black)),
                         )
-                    ],
-                  ),
-                ),
-                Expanded(
-                    child: ShaderMask(
-                  shaderCallback: (Rect rect) {
-                    return const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.white,
-                        Colors.transparent,
                       ],
-                      stops: [0.0, 0.03],
-                    ).createShader(rect);
-                  },
-                  blendMode: BlendMode.dstOut,
-                  child: Container(
-                    child: books.when(
-                        data: (data) {
-                          if (data.isEmpty) {
-                            return const Center(
-                              child: Text("No results found!"),
-                            );
-                          }
-
-                          return ListView.builder(
-                            physics: const ClampingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return BookCard(
-                                  imageUrl: data[index].image,
-                                  authors: data[index].authors,
-                                  title: data[index].title,
-                                  rating: data[index].averageRating,
-                                  categories: data[index].categories);
-                            },
-                            itemCount: data.length,
-                          );
-                        },
-                        loading: () =>
-                            const Center(child: CircularProgressIndicator()),
-                        error: (_, __) => const Center(
-                              child:
-                                  Text("Unexpected error. Please try again!"),
-                            )),
+                    ),
                   ),
-                )),
-              ],
-            )),
-      ),
-    );
+                  const Expanded(
+                      child: Center(child: CircularProgressIndicator()))
+                ]))));
+  }
+
+  Widget buildSearchingState(
+    BuildContext context,
+  ) {
+    return Scaffold(
+        body: SafeArea(
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: Column(children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    child: const SearchBox(),
+                  ),
+                  const Expanded(
+                      child: Center(child: CircularProgressIndicator()))
+                ]))));
+  }
+
+  Widget buildSearchReadyState(
+    BuildContext context,
+  ) {
+    return Scaffold(
+        body: SafeArea(
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: Column(children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    child: const SearchBox(
+                      autofocus: true,
+                    ),
+                  ),
+                ]))));
+  }
+
+  Widget buildSearchResultsState(BuildContext context, List<Book> books) {
+    return Scaffold(
+        body: SafeArea(
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: Column(children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    child: const SearchBox(),
+                  ),
+                  Expanded(
+                      child: Center(
+                          child: ListView.builder(
+                    physics: const ClampingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return BookCard(
+                          imageUrl: books[index].image,
+                          authors: books[index].authors,
+                          title: books[index].title,
+                          rating: books[index].averageRating,
+                          categories: books[index].categories);
+                    },
+                    itemCount: books.length,
+                  )))
+                ]))));
   }
 }
