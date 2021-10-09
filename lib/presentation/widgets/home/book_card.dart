@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class BookCard extends StatelessWidget {
   final String imageUrl;
@@ -27,10 +28,9 @@ class BookCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 3), // changes position of shadow
+              color: Colors.grey.withOpacity(0.25),
+              spreadRadius: 4,
+              blurRadius: 8,
             ),
           ]),
       child: Row(
@@ -40,10 +40,14 @@ class BookCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.circular(16),
+              image: DecorationImage(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(
-            width: 12,
+            width: 16,
           ),
           Expanded(
             child: Column(
@@ -51,21 +55,24 @@ class BookCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Text(
                     "by $author",
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
                     title,
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1!
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Row(
                     children: [
                       const Icon(
@@ -84,7 +91,7 @@ class BookCard extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Chip(
                       backgroundColor: const Color(0xFF9DDCFF),
                       label: Text(
