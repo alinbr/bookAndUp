@@ -46,6 +46,7 @@ class SearchPage extends ConsumerWidget {
             child: ListView.builder(
             itemCount: books.length,
             itemBuilder: (context, index) => BookCard(
+                id: books[index].id,
                 imageUrl: books[index].image,
                 authors: books[index].authors,
                 title: books[index].title,
