@@ -43,12 +43,8 @@ class HomeScreen extends ConsumerWidget {
               }
 
               return BookCard(
-                  id: books[index - 1].id,
-                  imageUrl: books[index - 1].image,
-                  authors: books[index - 1].authors,
-                  title: books[index - 1].title,
-                  rating: books[index - 1].averageRating,
-                  categories: books[index - 1].categories);
+                book: books[index - 1],
+              );
             },
           ),
         ),

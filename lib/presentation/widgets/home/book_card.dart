@@ -1,37 +1,26 @@
-import 'package:books_app_up/presentation/screens/book_page.dart';
+import 'package:books_app_up/infrastructure/dtos/book.dart';
+import 'package:books_app_up/presentation/screens/book_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BookCard extends StatelessWidget {
-  final String id;
-  final String imageUrl;
-  final List<String> authors;
-  final String title;
-  final double rating;
-  final List<String> categories;
+  final Book book;
 
-  const BookCard(
-      {Key? key,
-      required this.imageUrl,
-      required this.authors,
-      required this.title,
-      required this.rating,
-      required this.categories,
-      required this.id})
-      : super(key: key);
+  const BookCard({Key? key, required this.book}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String authorsLabel =
-        authors.isNotEmpty ? "by " + authors.join(", ") : "unkown author";
-    String? chipLabel = categories.isNotEmpty ? categories[0] : null;
+    String authorsLabel = book.authors.isNotEmpty
+        ? "by " + book.authors.join(", ")
+        : "unkown author";
+    String? chipLabel = book.categories.isNotEmpty ? book.categories[0] : null;
 
     return GestureDetector(
       onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const BookPage(),
+              builder: (context) => BookScreen(book: book),
             ));
       },
       child: Container(
@@ -50,7 +39,7 @@ class BookCard extends StatelessWidget {
             ]),
         child: Row(
           children: [
-            CoverImage(imageUrl: imageUrl, id: id),
+            CoverImage(imageUrl: book.image, id: book.id),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +54,7 @@ class BookCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
-                      title,
+                      book.title,
                       style: Theme.of(context)
                           .textTheme
                           .subtitle1!
@@ -83,7 +72,9 @@ class BookCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        rating != 0.0 ? rating.toString() : "n/a",
+                        book.averageRating != 0.0
+                            ? book.averageRating.toString()
+                            : "n/a",
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ],

@@ -27,6 +27,7 @@ class BookRepository implements BaseBookRepository {
 
     try {
       final result = await http.get(Uri.parse(q));
+
       if (result.statusCode != 200) {
         throw Exception(result.body);
       }
