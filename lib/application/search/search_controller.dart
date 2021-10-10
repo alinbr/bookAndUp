@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final searchTextEditorProvider =
     StateProvider<TextEditingController>((ref) => TextEditingController());
 
+final focusSearchKeyboard = StateProvider<bool>((ref) => false);
+
 final searchProvider =
     StateNotifierProvider<SearchController, SearchState>((ref) {
   final repository = ref.watch(bookRepository);

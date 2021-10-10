@@ -76,13 +76,13 @@ class SearchPage extends ConsumerWidget {
               onPressed: () {
                 Navigator.pop(context);
                 context.read(searchTextEditorProvider).state.clear();
+                context.read(focusSearchKeyboard).state = false;
               },
               icon: const Icon(Icons.arrow_back)),
           const Expanded(
             child: Hero(
               tag: "search",
               child: SearchBox(
-                autofocus: true,
                 enabled: true,
               ),
             ),

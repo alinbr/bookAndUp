@@ -92,6 +92,9 @@ class HomeScreen extends ConsumerWidget {
                   transitionDuration: const Duration(milliseconds: 300),
                 ),
               );
+              Future.delayed(const Duration(milliseconds: 300), () {
+                context.read(focusSearchKeyboard).state = true;
+              });
             },
             child: const Hero(child: SearchBox(), tag: "search"),
           ),

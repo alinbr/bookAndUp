@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SearchBox extends ConsumerWidget {
-  final bool autofocus;
   final bool enabled;
 
   const SearchBox({
     Key? key,
-    this.autofocus = false,
     this.enabled = false,
   }) : super(key: key);
 
@@ -34,8 +32,8 @@ class SearchBox extends ConsumerWidget {
             onChanged: (value) {
               context.read(searchProvider.notifier).search();
             },
+            autofocus: watch(focusSearchKeyboard).state,
             enabled: enabled,
-            autofocus: autofocus,
             controller: watch(searchTextEditorProvider).state,
             decoration: InputDecoration(
                 border: InputBorder.none,
