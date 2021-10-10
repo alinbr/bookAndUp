@@ -10,16 +10,6 @@ class HomeStateLoaded extends HomeState {
   HomeStateLoaded(this.books);
 }
 
-class HomeStateEmptySearch extends HomeState {}
-
-class HomeStateSearching extends HomeState {}
-
-class HomeStateSearchResults extends HomeState {
-  final List<Book> books;
-
-  HomeStateSearchResults(this.books);
-}
-
 class HomeStateError extends HomeState {
   final Exception error;
 

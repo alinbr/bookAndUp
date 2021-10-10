@@ -1,9 +1,12 @@
-import 'package:books_app_up/application/home_controller.dart';
-import 'package:books_app_up/application/home_state.dart';
+import 'package:books_app_up/application/home/home_controller.dart';
+import 'package:books_app_up/application/home/home_state.dart';
+import 'package:books_app_up/application/search/search_controller.dart';
 import 'package:books_app_up/infrastructure/dtos/book.dart';
 import 'package:books_app_up/presentation/screens/search_screen.dart';
 import 'package:books_app_up/presentation/widgets/home/book_card.dart';
-import 'package:books_app_up/presentation/widgets/home/search_box.dart';
+import 'package:books_app_up/presentation/widgets/core/search_box.dart';
+import 'package:books_app_up/presentation/widgets/home/header_subtitle.dart';
+import 'package:books_app_up/presentation/widgets/home/header_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,12 +24,6 @@ class HomeScreen extends ConsumerWidget {
       return buildInitialStateLoading(context);
     } else if (home is HomeStateLoaded) {
       return buildInitialStateLoaded(context, home.books);
-    } else if (home is HomeStateSearching) {
-      return buildSearchingState(context);
-    } else if (home is HomeStateSearchResults) {
-      return buildSearchResultsState(context, home.books);
-    } else if (home is HomeStateEmptySearch) {
-      return buildSearchReadyState(context);
     } else {
       return const SizedBox.shrink();
     }
@@ -34,162 +31,73 @@ class HomeScreen extends ConsumerWidget {
 
   Widget buildInitialStateLoaded(BuildContext context, List<Book> books) {
     return Scaffold(
-        body: SafeArea(
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: double.infinity,
-                child: Column(children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 22, bottom: 32),
-                          child: Text("Explore thousands of books on the go",
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.black)),
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SearchPage()),
-                              );
-                            },
-                            child: Hero(child: SearchBox(), tag: "search")),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 32),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Text("Famous Books",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.black)),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                      child: Center(
-                          child: ListView.builder(
-                    physics: const ClampingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return BookCard(
-                          imageUrl: books[index].image,
-                          authors: books[index].authors,
-                          title: books[index].title,
-                          rating: books[index].averageRating,
-                          categories: books[index].categories);
-                    },
-                    itemCount: books.length,
-                  )))
-                ]))));
+      body: SafeArea(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: double.infinity,
+          child: ListView.builder(
+            itemCount: books.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return buildHeader(context);
+              }
+
+              return BookCard(
+                  imageUrl: books[index - 1].image,
+                  authors: books[index - 1].authors,
+                  title: books[index - 1].title,
+                  rating: books[index - 1].averageRating,
+                  categories: books[index - 1].categories);
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   Widget buildInitialStateLoading(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: double.infinity,
-                child: Column(children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.only(top: 22),
-                          child: Text("Explore thousands of books on the go",
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.black)),
-                        ),
-                        SearchBox(),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Text("Famous Books",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.black)),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Expanded(
-                      child: Center(child: CircularProgressIndicator()))
-                ]))));
+      body: SafeArea(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: double.infinity,
+          child: Column(
+            children: [
+              buildHeader(context),
+              const Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  Widget buildSearchingState(
-    BuildContext context,
-  ) {
-    return Scaffold(
-        body: SafeArea(
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: double.infinity,
-                child: Column(children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    child: const SearchBox(),
-                  ),
-                  const Expanded(
-                      child: Center(child: CircularProgressIndicator()))
-                ]))));
-  }
-
-  Widget buildSearchReadyState(
-    BuildContext context,
-  ) {
-    return Scaffold(
-        body: SafeArea(
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: double.infinity,
-                child: Column(children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    child: const SearchBox(
-                      autofocus: true,
-                    ),
-                  ),
-                ]))));
-  }
-
-  Widget buildSearchResultsState(BuildContext context, List<Book> books) {
-    return Scaffold(
-        body: SafeArea(
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: double.infinity,
-                child: Column(children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    child: const SearchBox(),
-                  ),
-                  Expanded(
-                      child: Center(
-                          child: ListView.builder(
-                    physics: const ClampingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return BookCard(
-                          imageUrl: books[index].image,
-                          authors: books[index].authors,
-                          title: books[index].title,
-                          rating: books[index].averageRating,
-                          categories: books[index].categories);
-                    },
-                    itemCount: books.length,
-                  )))
-                ]))));
+  Widget buildHeader(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          const HeaderTitle(),
+          GestureDetector(
+            onTap: () {
+              context.read(searchProvider.notifier).reset();
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => const SearchPage(),
+                  transitionDuration: const Duration(milliseconds: 300),
+                ),
+              );
+            },
+            child: const Hero(child: SearchBox(), tag: "search"),
+          ),
+          const HeaderSubtitle()
+        ],
+      ),
+    );
   }
 }

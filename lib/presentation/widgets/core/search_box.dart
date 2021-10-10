@@ -1,4 +1,4 @@
-import 'package:books_app_up/application/home_controller.dart';
+import 'package:books_app_up/application/search/search_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,8 +7,11 @@ class SearchBox extends ConsumerWidget {
   final bool autofocus;
   final bool enabled;
 
-  const SearchBox({Key? key, this.autofocus = false, this.enabled = false})
-      : super(key: key);
+  const SearchBox({
+    Key? key,
+    this.autofocus = false,
+    this.enabled = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -27,23 +30,20 @@ class SearchBox extends ConsumerWidget {
           ],
         ),
         child: Focus(
-          // onFocusChange: (hasFocus) {
-          //   if (hasFocus) {
-          //     context.read(homeProvider.notifier).search();
-          //   }
-          // },
           child: TextField(
             onChanged: (value) {
-              value == ""
-                  ? context.read(homeProvider.notifier).retrieveItems()
-                  : context.read(homeProvider.notifier).search();
+              context.read(searchProvider.notifier).search();
             },
             enabled: enabled,
             autofocus: autofocus,
             controller: watch(searchTextEditorProvider).state,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
                 border: InputBorder.none,
-                icon: Icon(CupertinoIcons.search),
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                icon: enabled ? null : const Icon(CupertinoIcons.search),
                 hintText: 'Search for books...'),
             maxLines: 1,
           ),
