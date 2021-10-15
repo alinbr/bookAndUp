@@ -17,19 +17,20 @@ class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final home = watch(homeProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final home = ref.watch(homeProvider);
 
     if (home is HomeStateLoading) {
-      return buildInitialStateLoading(context);
+      return buildInitialStateLoading(context, ref);
     } else if (home is HomeStateLoaded) {
-      return buildInitialStateLoaded(context, home.books);
+      return buildInitialStateLoaded(context, home.books, ref);
     } else {
       return const SizedBox.shrink();
     }
   }
 
-  Widget buildInitialStateLoaded(BuildContext context, List<Book> books) {
+  Widget buildInitialStateLoaded(
+      BuildContext context, List<Book> books, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
@@ -39,7 +40,7 @@ class HomeScreen extends ConsumerWidget {
             itemCount: books.length + 1,
             itemBuilder: (context, index) {
               if (index == 0) {
-                return buildHeader(context);
+                return buildHeader(context, ref);
               }
 
               return BookCard(
@@ -52,7 +53,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildInitialStateLoading(BuildContext context) {
+  Widget buildInitialStateLoading(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
@@ -60,7 +61,7 @@ class HomeScreen extends ConsumerWidget {
           width: double.infinity,
           child: Column(
             children: [
-              buildHeader(context),
+              buildHeader(context, ref),
               const Expanded(
                 child: Center(
                   child: CircularProgressIndicator(),
@@ -73,7 +74,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildHeader(BuildContext context) {
+  Widget buildHeader(BuildContext context, WidgetRef ref) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -81,7 +82,7 @@ class HomeScreen extends ConsumerWidget {
           const HeaderTitle(),
           GestureDetector(
             onTap: () {
-              context.read(searchProvider.notifier).reset();
+              ref.read(searchProvider.notifier).reset();
               Navigator.push(
                 context,
                 PageRouteBuilder(
@@ -90,7 +91,7 @@ class HomeScreen extends ConsumerWidget {
                 ),
               );
               Future.delayed(const Duration(milliseconds: 300), () {
-                context.read(focusSearchKeyboard).state = true;
+                ref.read(focusSearchKeyboard).state = true;
               });
             },
             child: const Hero(child: SearchBox(), tag: "search"),

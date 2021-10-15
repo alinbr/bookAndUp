@@ -1,10 +1,13 @@
-import 'package:books_app_up/presentation/screens/home_screen.dart';
-import 'package:books_app_up/presentation/screens/login_screen.dart';
 import 'package:books_app_up/presentation/screens/register_screen.dart';
+import 'package:books_app_up/presentation/widgets/core/auth_wrapper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -17,6 +20,6 @@ class MyApp extends StatelessWidget {
         title: 'Books App and Up',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(),
-        home: const RegisterScreen());
+        home: const AuthWrapper());
   }
 }

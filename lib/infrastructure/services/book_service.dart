@@ -4,16 +4,16 @@ import 'package:books_app_up/infrastructure/dtos/book.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-final bookRepository = Provider<BaseBookRepository>((ref) {
-  return BookRepository();
+final bookService = Provider<BaseBookService>((ref) {
+  return BookService();
 });
 
-abstract class BaseBookRepository {
+abstract class BaseBookService {
   Future<List<Book>> getFamousBooks();
   Future<List<Book>> search(String input);
 }
 
-class BookRepository implements BaseBookRepository {
+class BookService implements BaseBookService {
   final String baseUrl = 'https://www.googleapis.com/books/v1/volumes?q=';
 
   @override

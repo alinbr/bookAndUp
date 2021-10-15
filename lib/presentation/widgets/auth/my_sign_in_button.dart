@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class MySignInButton extends StatelessWidget {
   final String text;
+  final VoidCallback onPressed;
 
-  const MySignInButton({Key? key, required this.text}) : super(key: key);
+  const MySignInButton({Key? key, required this.text, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class MySignInButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(24.0),
           ),
         ),
-        onPressed: () async {},
+        onPressed: onPressed,
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Text(

@@ -1,5 +1,5 @@
 import 'package:books_app_up/application/search/search_state.dart';
-import 'package:books_app_up/infrastructure/repositories/book_repository.dart';
+import 'package:books_app_up/infrastructure/services/book_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,17 +10,17 @@ final focusSearchKeyboard = StateProvider<bool>((ref) => false);
 
 final searchProvider =
     StateNotifierProvider<SearchController, SearchState>((ref) {
-  final repository = ref.watch(bookRepository);
+  final repository = ref.watch(bookService);
   final searchEditor = ref.watch(searchTextEditorProvider).state;
   return SearchController(repository, searchEditor);
 });
 
 class SearchController extends StateNotifier<SearchState> {
-  final BaseBookRepository _repository;
+  final BaseBookService _bookService;
   final TextEditingController _searchEditor;
   String _previousSearchInput = "";
 
-  SearchController(this._repository, this._searchEditor)
+  SearchController(this._bookService, this._searchEditor)
       : super(SearchStateEmpty());
 
   void reset() {
@@ -41,7 +41,7 @@ class SearchController extends StateNotifier<SearchState> {
 
       try {
         var inputSearch = _searchEditor.text;
-        final items = await _repository.search(inputSearch);
+        final items = await _bookService.search(inputSearch);
         if (inputSearch == _searchEditor.text) {
           state = SearchStateResults(items);
         }

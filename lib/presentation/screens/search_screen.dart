@@ -10,8 +10,8 @@ class SearchPage extends ConsumerWidget {
   const SearchPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final search = watch(searchProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final search = ref.watch(searchProvider);
 
     Widget _resultsWidget;
     if (search is SearchStateEmpty) {
@@ -30,7 +30,7 @@ class SearchPage extends ConsumerWidget {
           width: double.infinity,
           child: Column(
             children: [
-              buildHeader(context),
+              buildHeader(context, ref),
               _resultsWidget,
             ],
           ),
@@ -63,7 +63,7 @@ class SearchPage extends ConsumerWidget {
     return Container();
   }
 
-  Padding buildHeader(BuildContext context) {
+  Padding buildHeader(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -72,8 +72,8 @@ class SearchPage extends ConsumerWidget {
           IconButton(
               onPressed: () {
                 Navigator.pop(context);
-                context.read(searchTextEditorProvider).state.clear();
-                context.read(focusSearchKeyboard).state = false;
+                ref.read(searchTextEditorProvider).state.clear();
+                ref.read(focusSearchKeyboard).state = false;
               },
               icon: const Icon(Icons.arrow_back)),
           const Expanded(

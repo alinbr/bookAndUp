@@ -12,7 +12,7 @@ class SearchBox extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Material(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 6),
@@ -30,11 +30,11 @@ class SearchBox extends ConsumerWidget {
         child: Focus(
           child: TextField(
             onChanged: (value) {
-              context.read(searchProvider.notifier).search();
+              ref.read(searchProvider.notifier).search();
             },
-            autofocus: watch(focusSearchKeyboard).state,
+            autofocus: ref.watch(focusSearchKeyboard).state,
             enabled: enabled,
-            controller: watch(searchTextEditorProvider).state,
+            controller: ref.watch(searchTextEditorProvider).state,
             decoration: InputDecoration(
                 border: InputBorder.none,
                 focusedBorder: InputBorder.none,
