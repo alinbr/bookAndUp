@@ -68,7 +68,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 SignInButton(
                   Buttons.Google,
                   text: "Sign in with Google",
-                  onPressed: () {},
+                  onPressed: () async {
+                    String msg =
+                        await ref.read(authProvider).signInWithGoogle();
+
+                    if (msg == "Signed in") {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AuthWrapper(),
+                          ));
+                    } else {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(msg)),
+                      );
+                    }
+
+                    return;
+                  },
                   elevation: 6,
                   padding: const EdgeInsets.all(8),
                   shape: RoundedRectangleBorder(

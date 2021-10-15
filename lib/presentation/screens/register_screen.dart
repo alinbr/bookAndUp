@@ -70,7 +70,25 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 SignInButton(
                   Buttons.Google,
                   text: "Register with Google",
-                  onPressed: () {},
+                  onPressed: () async {
+                    String msg =
+                        await ref.read(authProvider).signInWithGoogle();
+
+                    if (msg == "Signed in") {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AuthWrapper(),
+                          ));
+                    } else {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(msg)),
+                      );
+                    }
+
+                    return;
+                  },
                   elevation: 6,
                   padding: const EdgeInsets.all(8),
                   shape: RoundedRectangleBorder(

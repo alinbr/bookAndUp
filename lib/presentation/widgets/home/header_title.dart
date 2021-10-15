@@ -11,6 +11,11 @@ class HeaderTitle extends ConsumerWidget {
       padding: EdgeInsets.only(top: 22, bottom: 32),
       child: Row(
         children: [
+          IconButton(
+              onPressed: () {
+                ref.read(authProvider).signOut();
+              },
+              icon: const Icon(Icons.logout)),
           const Expanded(
             child: Text("Explore thousands of books on the go",
                 style: TextStyle(
@@ -18,11 +23,6 @@ class HeaderTitle extends ConsumerWidget {
                     fontWeight: FontWeight.w800,
                     color: Colors.black)),
           ),
-          IconButton(
-              onPressed: () {
-                ref.read(authProvider).signOut();
-              },
-              icon: const Icon(Icons.logout))
         ],
       ),
     );
