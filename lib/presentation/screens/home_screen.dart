@@ -1,8 +1,12 @@
+import 'package:books_app_up/application/auth/auth_controller.dart';
 import 'package:books_app_up/application/home/home_controller.dart';
 import 'package:books_app_up/application/home/home_state.dart';
 import 'package:books_app_up/application/search/search_controller.dart';
 import 'package:books_app_up/infrastructure/dtos/book.dart';
+import 'package:books_app_up/presentation/screens/favorites_screen.dart';
 import 'package:books_app_up/presentation/screens/search_screen.dart';
+import 'package:books_app_up/presentation/widgets/core/auth_wrapper.dart';
+import 'package:books_app_up/presentation/widgets/core/my_drawer.dart';
 import 'package:books_app_up/presentation/widgets/home/book_card.dart';
 import 'package:books_app_up/presentation/widgets/core/search_box.dart';
 import 'package:books_app_up/presentation/widgets/home/header_subtitle.dart';
@@ -32,6 +36,7 @@ class HomeScreen extends ConsumerWidget {
   Widget buildInitialStateLoaded(
       BuildContext context, List<Book> books, WidgetRef ref) {
     return Scaffold(
+      drawer: const MyDrawer(),
       body: SafeArea(
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -55,6 +60,7 @@ class HomeScreen extends ConsumerWidget {
 
   Widget buildInitialStateLoading(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      drawer: const MyDrawer(),
       body: SafeArea(
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -78,7 +84,14 @@ class HomeScreen extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          IconButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: const Icon(Icons.menu)),
           const HeaderTitle(),
           GestureDetector(
             onTap: () {
