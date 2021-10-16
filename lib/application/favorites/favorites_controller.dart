@@ -1,18 +1,7 @@
 import 'package:books_app_up/application/auth/auth_controller.dart';
 import 'package:books_app_up/application/favorites/favorites_state.dart';
-import 'package:books_app_up/application/favorites/providers.dart';
 import 'package:books_app_up/infrastructure/services/book_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final favoritesStateProvider =
-    StateNotifierProvider.autoDispose<FavoritesController, FavoritesState>(
-        (ref) {
-  final service = ref.watch(bookService);
-  final userId = ref.watch(authStateProvider).value!.uid;
-  final favoritesList = ref.watch(favoritesProvider(userId));
-
-  return FavoritesController(service, favoritesList);
-});
 
 class FavoritesController extends StateNotifier<FavoritesState> {
   final BaseBookService _bookService;

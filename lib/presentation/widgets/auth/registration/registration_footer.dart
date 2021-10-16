@@ -1,4 +1,5 @@
-import 'package:books_app_up/application/auth/auth_controller.dart';
+import 'package:books_app_up/application/auth/auth_enum.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,7 +16,9 @@ class RegistrationFooter extends ConsumerWidget {
           const Text('Already a member?'),
           TextButton(
               onPressed: () {
-                ref.read(authModeProvider.notifier).changeState(AuthMode.login);
+                ref
+                    .read(authControllerProvider.notifier)
+                    .changeState(AuthMode.login);
               },
               child: const Text("Login instead!"))
         ],

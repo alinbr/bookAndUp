@@ -1,4 +1,4 @@
-import 'package:books_app_up/application/search/search_controller.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:books_app_up/application/search/search_state.dart';
 import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
 import 'package:books_app_up/presentation/widgets/home/book_card.dart';
@@ -11,7 +11,7 @@ class SearchPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final search = ref.watch(searchProvider);
+    final search = ref.watch(searchControllerProvider);
 
     Widget content;
     if (search is SearchStateEmpty) {

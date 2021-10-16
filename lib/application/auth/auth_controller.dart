@@ -1,24 +1,6 @@
+import 'package:books_app_up/application/auth/auth_enum.dart';
 import 'package:books_app_up/infrastructure/services/authentication_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final firebaseAuthProvider =
-    Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
-
-final authProvider = Provider<BaseAuthService>(
-    (ref) => FirebaseAuthService(ref.watch(firebaseAuthProvider)));
-
-final authStateProvider = StreamProvider<User?>(
-    (ref) => ref.watch(firebaseAuthProvider).authStateChanges());
-
-enum AuthMode {
-  login,
-  registration,
-}
-
-final authModeProvider = StateNotifierProvider<AuthController, AuthMode>((ref) {
-  return AuthController(ref.watch(authProvider));
-});
 
 class AuthController extends StateNotifier<AuthMode> {
   final BaseAuthService _authService;

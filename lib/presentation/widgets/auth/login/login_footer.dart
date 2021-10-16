@@ -1,4 +1,5 @@
-import 'package:books_app_up/application/auth/auth_controller.dart';
+import 'package:books_app_up/application/auth/auth_enum.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,7 +17,7 @@ class LoginFooter extends ConsumerWidget {
           TextButton(
               onPressed: () {
                 ref
-                    .read(authModeProvider.notifier)
+                    .read(authControllerProvider.notifier)
                     .changeState(AuthMode.registration);
               },
               child: const Text("Register now!"))

@@ -1,4 +1,4 @@
-import 'package:books_app_up/application/search/search_controller.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,9 +30,9 @@ class SearchBox extends ConsumerWidget {
         child: Focus(
           child: TextField(
             onChanged: (value) {
-              ref.read(searchProvider.notifier).search();
+              ref.read(searchControllerProvider.notifier).search();
             },
-            autofocus: ref.watch(focusSearchKeyboard).state,
+            autofocus: ref.watch(focusSearchProvider).state,
             enabled: enabled,
             controller: ref.watch(searchTextEditorProvider).state,
             decoration: InputDecoration(

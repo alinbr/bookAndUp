@@ -1,4 +1,4 @@
-import 'package:books_app_up/application/auth/auth_controller.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:books_app_up/presentation/screens/auth_screen.dart';
 import 'package:books_app_up/presentation/screens/home_screen.dart';
 

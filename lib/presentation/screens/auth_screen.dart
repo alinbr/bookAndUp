@@ -1,4 +1,5 @@
-import 'package:books_app_up/application/auth/auth_controller.dart';
+import 'package:books_app_up/application/auth/auth_enum.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:books_app_up/presentation/widgets/auth/field_wrapper.dart';
 import 'package:books_app_up/presentation/widgets/auth/google_sign_in_button.dart';
 import 'package:books_app_up/presentation/widgets/auth/login/login_footer.dart';
@@ -33,7 +34,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authMode = ref.watch(authModeProvider);
+    final authMode = ref.watch(authControllerProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xffEEECF4),
@@ -90,10 +91,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
       String result = authMode == AuthMode.registration
           ? await ref
-              .read(authModeProvider.notifier)
+              .read(authControllerProvider.notifier)
               .signUp(_emailController.text, _passwordController.text)
           : await ref
-              .read(authModeProvider.notifier)
+              .read(authControllerProvider.notifier)
               .signIn(_emailController.text, _passwordController.text);
 
       if (result == "Signed up" || result == "Signed in") {
@@ -115,7 +116,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     return FieldWrapper(
       textFormField: TextFormField(
         validator: (value) => ref
-            .read(authModeProvider.notifier)
+            .read(authControllerProvider.notifier)
             .validateRepeatPassword(value, _passwordController.text),
         obscureText: true,
         decoration: const InputDecoration(
@@ -136,7 +137,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       textFormField: TextFormField(
         controller: _passwordController,
         validator: (value) =>
-            ref.read(authModeProvider.notifier).validatePassword(value),
+            ref.read(authControllerProvider.notifier).validatePassword(value),
         obscureText: true,
         decoration: const InputDecoration(
             filled: true,
@@ -156,7 +157,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       textFormField: TextFormField(
         controller: _emailController,
         validator: (value) =>
-            ref.read(authModeProvider.notifier).validateEmail(value),
+            ref.read(authControllerProvider.notifier).validateEmail(value),
         maxLines: 1,
         decoration: const InputDecoration(
             filled: true,

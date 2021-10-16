@@ -2,11 +2,6 @@ import 'package:books_app_up/application/home/home_state.dart';
 import 'package:books_app_up/infrastructure/services/book_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final homeProvider = StateNotifierProvider<HomeController, HomeState>((ref) {
-  final repository = ref.watch(bookService);
-  return HomeController(repository);
-});
-
 class HomeController extends StateNotifier<HomeState> {
   final BaseBookService _bookService;
   HomeController(this._bookService) : super(HomeStateLoading()) {

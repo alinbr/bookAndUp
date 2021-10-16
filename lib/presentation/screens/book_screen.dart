@@ -1,5 +1,5 @@
-import 'package:books_app_up/application/auth/auth_controller.dart';
-import 'package:books_app_up/application/favorites/providers.dart';
+import 'package:books_app_up/application/favorites/helper.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
 import 'package:books_app_up/infrastructure/services/favorites_service.dart';
 import 'package:books_app_up/presentation/widgets/book_details/authors.dart';

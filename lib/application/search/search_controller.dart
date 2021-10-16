@@ -3,18 +3,6 @@ import 'package:books_app_up/infrastructure/services/book_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final searchTextEditorProvider =
-    StateProvider<TextEditingController>((ref) => TextEditingController());
-
-final focusSearchKeyboard = StateProvider<bool>((ref) => false);
-
-final searchProvider =
-    StateNotifierProvider<SearchController, SearchState>((ref) {
-  final repository = ref.watch(bookService);
-  final searchEditor = ref.watch(searchTextEditorProvider).state;
-  return SearchController(repository, searchEditor);
-});
-
 class SearchController extends StateNotifier<SearchState> {
   final BaseBookService _bookService;
   final TextEditingController _searchEditor;

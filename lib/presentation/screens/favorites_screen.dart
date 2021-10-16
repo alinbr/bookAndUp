@@ -1,5 +1,5 @@
-import 'package:books_app_up/application/favorites/favorites_controller.dart';
 import 'package:books_app_up/application/favorites/favorites_state.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
 import 'package:books_app_up/presentation/widgets/core/my_drawer.dart';
 import 'package:books_app_up/presentation/widgets/home/book_card.dart';
@@ -12,7 +12,7 @@ class FavoritesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final favorites = ref.watch(favoritesStateProvider);
+    final favorites = ref.watch(favoritesControllerProvider);
 
     Widget content;
     if (favorites is FavoritesStateLoading) {

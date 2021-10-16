@@ -1,5 +1,5 @@
-import 'package:books_app_up/application/home/home_controller.dart';
 import 'package:books_app_up/application/home/home_state.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
 import 'package:books_app_up/presentation/widgets/core/my_drawer.dart';
 import 'package:books_app_up/presentation/widgets/home/book_card.dart';
@@ -15,7 +15,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final home = ref.watch(homeProvider);
+    final home = ref.watch(homeControllerProvider);
 
     final Widget content;
     if (home is HomeStateLoading) {

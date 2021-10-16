@@ -1,4 +1,4 @@
-import 'package:books_app_up/application/search/search_controller.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:books_app_up/presentation/screens/search_screen.dart';
 import 'package:books_app_up/presentation/widgets/core/search_box.dart';
 import 'package:books_app_up/presentation/widgets/home/header_title.dart';
@@ -37,7 +37,7 @@ class Header extends ConsumerWidget {
   }
 
   void _onTapSearchBar(WidgetRef ref, BuildContext context) {
-    ref.read(searchProvider.notifier).reset();
+    ref.read(searchControllerProvider.notifier).reset();
     Navigator.push(
       context,
       PageRouteBuilder(
@@ -46,7 +46,7 @@ class Header extends ConsumerWidget {
       ),
     );
     Future.delayed(const Duration(milliseconds: 300), () {
-      ref.read(focusSearchKeyboard).state = true;
+      ref.read(focusSearchProvider).state = true;
     });
   }
 }

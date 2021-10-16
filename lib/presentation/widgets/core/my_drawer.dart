@@ -1,4 +1,4 @@
-import 'package:books_app_up/application/auth/auth_controller.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:books_app_up/presentation/screens/favorites_screen.dart';
 import 'package:books_app_up/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class MyDrawer extends ConsumerWidget {
           ListTile(
             title: const Text('Sign out'),
             onTap: () {
-              ref.read(authProvider).signOut();
+              ref.read(authServiceProvider).signOut();
             },
           ),
         ],

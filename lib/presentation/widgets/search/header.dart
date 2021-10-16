@@ -1,4 +1,4 @@
-import 'package:books_app_up/application/search/search_controller.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:books_app_up/presentation/widgets/core/search_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +17,7 @@ class Header extends ConsumerWidget {
               onPressed: () {
                 Navigator.pop(context);
                 ref.read(searchTextEditorProvider).state.clear();
-                ref.read(focusSearchKeyboard).state = false;
+                ref.read(focusSearchProvider).state = false;
               },
               icon: const Icon(Icons.arrow_back)),
           const Expanded(

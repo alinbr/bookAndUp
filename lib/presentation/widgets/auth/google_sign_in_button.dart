@@ -1,4 +1,4 @@
-import 'package:books_app_up/application/auth/auth_controller.dart';
+import 'package:books_app_up/application/providers.dart';
 import 'package:books_app_up/presentation/widgets/core/auth_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +13,7 @@ class GoogleSignInButton extends ConsumerWidget {
       Buttons.Google,
       text: "Sign in with Google",
       onPressed: () async {
-        String msg = await ref.read(authProvider).signInWithGoogle();
+        String msg = await ref.read(authServiceProvider).signInWithGoogle();
 
         if (msg == "Signed in") {
           Navigator.pushReplacement(
