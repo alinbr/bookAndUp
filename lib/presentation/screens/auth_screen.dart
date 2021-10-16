@@ -51,26 +51,25 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (authMode.state == AuthMode.login) const LoginHeader(),
-                if (authMode.state == AuthMode.registration)
+                if (authMode == AuthMode.login) const LoginHeader(),
+                if (authMode == AuthMode.registration)
                   const RegistrationHeader(),
                 const SizedBox(height: 24),
                 _buildEmailField(context),
                 _buildPasswordField(context),
-                if (authMode.state == AuthMode.registration)
-                  _buildRepeatPassField(context, authMode.state),
+                if (authMode == AuthMode.registration)
+                  _buildRepeatPassField(context, authMode),
                 ActionButton(
-                  text:
-                      authMode.state == AuthMode.login ? "Sign in" : "Register",
+                  text: authMode == AuthMode.login ? "Sign in" : "Register",
                   onPressed: () async {
-                    await authenticateUser(context, authMode.state);
+                    await authenticateUser(context, authMode);
                   },
                 ),
                 const OrDivider(),
                 const GoogleSignInButton(),
                 const Spacer(),
-                if (authMode.state == AuthMode.login) const LoginFooter(),
-                if (authMode.state == AuthMode.registration)
+                if (authMode == AuthMode.login) const LoginFooter(),
+                if (authMode == AuthMode.registration)
                   const RegistrationFooter(),
               ],
             ),
@@ -89,13 +88,15 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 : 'Logging you in..')),
       );
 
-      String msg = authMode == AuthMode.registration
-          ? await ref.read(authProvider).signUpWithEmailAndPassword(
-              _emailController.text, _passwordController.text)
-          : await ref.read(authProvider).signInWithEmailAndPassword(
-              _emailController.text, _passwordController.text);
+      String result = authMode == AuthMode.registration
+          ? await ref
+              .read(authModeProvider.notifier)
+              .signUp(_emailController.text, _passwordController.text)
+          : await ref
+              .read(authModeProvider.notifier)
+              .signIn(_emailController.text, _passwordController.text);
 
-      if (msg == "Signed up" || msg == "Signed in") {
+      if (result == "Signed up" || result == "Signed in") {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -104,7 +105,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       } else {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(msg)),
+          SnackBar(content: Text(result)),
         );
       }
     }
@@ -113,13 +114,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   Widget _buildRepeatPassField(BuildContext context, AuthMode authMode) {
     return FieldWrapper(
       textFormField: TextFormField(
-        validator: (value) {
-          if (authMode == AuthMode.registration &&
-              value != _passwordController.text) {
-            return "Passwords does not match!";
-          }
-          return null;
-        },
+        validator: (value) => ref
+            .read(authModeProvider.notifier)
+            .validateRepeatPassword(value, _passwordController.text),
         obscureText: true,
         decoration: const InputDecoration(
             filled: true,
@@ -138,13 +135,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     return FieldWrapper(
       textFormField: TextFormField(
         controller: _passwordController,
-        validator: (value) {
-          if (value == null || value.length < 6) {
-            return "Password must have at least 6 characters";
-          }
-
-          return null;
-        },
+        validator: (value) =>
+            ref.read(authModeProvider.notifier).validatePassword(value),
         obscureText: true,
         decoration: const InputDecoration(
             filled: true,
@@ -163,15 +155,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     return FieldWrapper(
       textFormField: TextFormField(
         controller: _emailController,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return "Email can't be empty";
-          }
-          if (!value.contains("@")) {
-            return "Invalid email";
-          }
-          return null;
-        },
+        validator: (value) =>
+            ref.read(authModeProvider.notifier).validateEmail(value),
         maxLines: 1,
         decoration: const InputDecoration(
             filled: true,

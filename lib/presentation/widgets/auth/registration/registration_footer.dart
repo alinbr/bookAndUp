@@ -15,7 +15,7 @@ class RegistrationFooter extends ConsumerWidget {
           const Text('Already a member?'),
           TextButton(
               onPressed: () {
-                ref.read(authModeProvider).state = AuthMode.login;
+                ref.read(authModeProvider.notifier).changeState(AuthMode.login);
               },
               child: const Text("Login instead!"))
         ],
