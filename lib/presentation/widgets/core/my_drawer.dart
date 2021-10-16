@@ -37,7 +37,7 @@ class MyDrawer extends ConsumerWidget {
             },
           ),
           ListTile(
-            title: const Icon(Icons.logout),
+            title: const Text('Sign out'),
             onTap: () {
               ref.read(authProvider).signOut();
             },
