@@ -73,7 +73,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         await ref.read(authProvider).signInWithGoogle();
 
                     if (msg == "Signed in") {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const AuthWrapper(),
@@ -119,7 +119,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     _emailController.text, _passwordController.text);
 
             if (msg == "Signed in") {
-              Navigator.push(
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const AuthWrapper(),

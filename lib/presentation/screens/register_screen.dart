@@ -75,7 +75,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         await ref.read(authProvider).signInWithGoogle();
 
                     if (msg == "Signed in") {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const AuthWrapper(),
@@ -121,7 +121,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     _emailController.text, _passwordController.text);
 
             if (msg == "Signed up") {
-              Navigator.push(
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const AuthWrapper(),

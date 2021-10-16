@@ -1,6 +1,6 @@
 import 'package:books_app_up/application/search/search_controller.dart';
 import 'package:books_app_up/application/search/search_state.dart';
-import 'package:books_app_up/infrastructure/dtos/book.dart';
+import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
 import 'package:books_app_up/presentation/widgets/core/search_box.dart';
 import 'package:books_app_up/presentation/widgets/home/book_card.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class SearchPage extends ConsumerWidget {
     );
   }
 
-  Widget buildSearchStateResults(BuildContext context, List<Book> books) {
+  Widget buildSearchStateResults(BuildContext context, List<BookDto> books) {
     return books.isEmpty
         ? const Center(child: Text("No results found"))
         : Expanded(

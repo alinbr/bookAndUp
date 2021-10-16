@@ -2,7 +2,7 @@ import 'package:books_app_up/application/auth/auth_controller.dart';
 import 'package:books_app_up/application/home/home_controller.dart';
 import 'package:books_app_up/application/home/home_state.dart';
 import 'package:books_app_up/application/search/search_controller.dart';
-import 'package:books_app_up/infrastructure/dtos/book.dart';
+import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
 import 'package:books_app_up/presentation/screens/favorites_screen.dart';
 import 'package:books_app_up/presentation/screens/search_screen.dart';
 import 'package:books_app_up/presentation/widgets/core/auth_wrapper.dart';
@@ -34,7 +34,7 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget buildInitialStateLoaded(
-      BuildContext context, List<Book> books, WidgetRef ref) {
+      BuildContext context, List<BookDto> books, WidgetRef ref) {
     return Scaffold(
       drawer: const MyDrawer(),
       body: SafeArea(

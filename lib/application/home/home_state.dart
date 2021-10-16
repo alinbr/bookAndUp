@@ -1,11 +1,11 @@
-import 'package:books_app_up/infrastructure/dtos/book.dart';
+import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
 
 abstract class HomeState {}
 
 class HomeStateLoading extends HomeState {}
 
 class HomeStateLoaded extends HomeState {
-  final List<Book> books;
+  final List<BookDto> books;
 
   HomeStateLoaded(this.books);
 }

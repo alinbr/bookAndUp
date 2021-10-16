@@ -1,19 +1,27 @@
-import 'package:books_app_up/infrastructure/dtos/book.dart';
+import 'package:books_app_up/application/auth/auth_controller.dart';
+import 'package:books_app_up/application/favorites/providers.dart';
+import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
+import 'package:books_app_up/infrastructure/services/favorites_service.dart';
 import 'package:books_app_up/presentation/widgets/book_details/preview_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BookScreen extends StatelessWidget {
-  final Book book;
+class BookScreen extends ConsumerWidget {
+  final BookDto book;
 
   const BookScreen({Key? key, required this.book}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(authStateProvider).value!.uid;
+    final isUserFavorite =
+        ref.watch(isUserFavoriteProvider(UserBook(userId, book.selfLink)));
+
     return Scaffold(
         backgroundColor: Colors.white,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: PreviewButton(book: book),
-        appBar: _buildAppBar(context),
+        appBar: _buildAppBar(context, ref, isUserFavorite),
         body: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
           child: Column(
@@ -34,7 +42,8 @@ class BookScreen extends StatelessWidget {
         ));
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  AppBar _buildAppBar(
+      BuildContext context, WidgetRef ref, bool isUserFavorite) {
     return AppBar(
       elevation: 0,
       backgroundColor: const Color(0xFFF3F2F3),
@@ -45,8 +54,18 @@ class BookScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black)),
       actions: [
         IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.favorite_outline, color: Colors.black)),
+            onPressed: () {
+              String userId = ref.read(authStateProvider).value!.uid;
+
+              if (isUserFavorite) {
+                ref.read(favoritesService).remove(userId, book.selfLink);
+              } else {
+                ref.read(favoritesService).add(userId, book.selfLink);
+              }
+            },
+            icon: isUserFavorite
+                ? const Icon(Icons.favorite, color: Colors.red)
+                : const Icon(Icons.favorite_outline, color: Colors.black)),
       ],
     );
   }

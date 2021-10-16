@@ -1,4 +1,4 @@
-import 'package:books_app_up/infrastructure/dtos/book.dart';
+import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -8,7 +8,7 @@ class PreviewButton extends StatelessWidget {
     required this.book,
   }) : super(key: key);
 
-  final Book book;
+  final BookDto book;
 
   @override
   Widget build(BuildContext context) {

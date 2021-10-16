@@ -1,5 +1,6 @@
 import 'package:books_app_up/application/auth/auth_controller.dart';
 import 'package:books_app_up/presentation/screens/favorites_screen.dart';
+import 'package:books_app_up/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +15,16 @@ class MyDrawer extends ConsumerWidget {
         children: [
           const DrawerHeader(
             child: Text('Menu'),
+          ),
+          ListTile(
+            title: const Text('Home'),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ));
+            },
           ),
           ListTile(
             title: const Text('View favorites'),

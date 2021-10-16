@@ -1,10 +1,10 @@
-import 'package:books_app_up/infrastructure/dtos/book.dart';
+import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
 import 'package:books_app_up/presentation/screens/book_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BookCard extends StatelessWidget {
-  final Book book;
+  final BookDto book;
 
   const BookCard({Key? key, required this.book}) : super(key: key);
 

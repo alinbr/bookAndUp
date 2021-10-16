@@ -1,7 +1,7 @@
-class Book {
+class BookDto {
   final String id;
 
-  final Uri? selfLink;
+  final String selfLink;
 
   final String title;
 
@@ -25,7 +25,7 @@ class Book {
 
   final String previewLink;
 
-  const Book({
+  const BookDto({
     required this.id,
     required this.selfLink,
     required this.title,
@@ -41,12 +41,12 @@ class Book {
     required this.previewLink,
   });
 
-  static Book fromJson(Map<String, dynamic> json) {
+  static BookDto fromJson(Map<String, dynamic> json) {
     final volumeInfo = json['volumeInfo'];
 
-    return Book(
+    return BookDto(
         id: json['id'],
-        selfLink: Uri.parse(json['selfLink']),
+        selfLink: json['selfLink'],
         title: volumeInfo['title'] ?? '',
         authors: volumeInfo['authors'] != null
             ? volumeInfo['authors'].cast<String>()
