@@ -20,7 +20,6 @@ class UserBook {
 final isUserFavoriteProvider =
     Provider.autoDispose.family<bool, UserBook>((ref, userBook) {
   final favorites = ref.watch(favoritesProvider(userBook.userId));
-  print("aaa");
 
   return favorites.when(
       data: (data) =>

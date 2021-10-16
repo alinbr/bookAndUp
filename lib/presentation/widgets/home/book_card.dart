@@ -26,14 +26,14 @@ class BookCard extends StatelessWidget {
       child: Container(
         height: 180,
         padding: const EdgeInsets.all(8),
-        margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
+        margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.25),
-                spreadRadius: 4,
+                spreadRadius: 10,
                 blurRadius: 8,
               ),
             ]),

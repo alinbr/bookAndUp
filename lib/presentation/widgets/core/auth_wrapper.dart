@@ -1,7 +1,7 @@
 import 'package:books_app_up/application/auth/auth_controller.dart';
 import 'package:books_app_up/presentation/screens/home_screen.dart';
 import 'package:books_app_up/presentation/screens/register_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,7 +15,7 @@ class AuthWrapper extends ConsumerWidget {
     return auth.when(
         data: (data) {
           if (data == null) {
-            return RegisterScreen();
+            return const RegisterScreen();
           }
           return const HomeScreen();
         },

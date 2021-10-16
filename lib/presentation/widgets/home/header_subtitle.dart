@@ -6,7 +6,7 @@ class HeaderSubtitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.only(top: 32),
+      padding: EdgeInsets.only(top: 24),
       child: SizedBox(
         width: double.infinity,
         child: Text("Famous Books",

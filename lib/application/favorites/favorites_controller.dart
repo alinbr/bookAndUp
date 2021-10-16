@@ -2,7 +2,6 @@ import 'package:books_app_up/application/auth/auth_controller.dart';
 import 'package:books_app_up/application/favorites/favorites_state.dart';
 import 'package:books_app_up/application/favorites/providers.dart';
 import 'package:books_app_up/infrastructure/services/book_service.dart';
-import 'package:books_app_up/infrastructure/services/favorites_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final favoritesStateProvider =

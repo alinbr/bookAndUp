@@ -3,7 +3,6 @@ import 'package:books_app_up/presentation/widgets/auth/field_wrapper.dart';
 import 'package:books_app_up/presentation/widgets/auth/my_sign_in_button.dart';
 import 'package:books_app_up/presentation/widgets/auth/or_divider.dart';
 import 'package:books_app_up/presentation/widgets/auth/register_footer.dart';
-import 'package:books_app_up/presentation/widgets/auth/sign_in_footer.dart';
 import 'package:books_app_up/presentation/widgets/core/auth_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

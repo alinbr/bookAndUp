@@ -1,6 +1,5 @@
 import 'package:books_app_up/application/favorites/favorites_controller.dart';
 import 'package:books_app_up/application/favorites/favorites_state.dart';
-import 'package:books_app_up/application/favorites/providers.dart';
 import 'package:books_app_up/infrastructure/dtos/book_dto.dart';
 import 'package:books_app_up/presentation/widgets/core/my_drawer.dart';
 import 'package:books_app_up/presentation/widgets/home/book_card.dart';

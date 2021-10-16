@@ -19,7 +19,6 @@ class FavoritesService extends BaseFavoritesService {
   @override
   Future<String> add(String userId, String bookUrl) async {
     try {
-      print("adding book");
       await _firebaseFirestore
           .collection('favorites')
           .doc(userId)
@@ -34,7 +33,6 @@ class FavoritesService extends BaseFavoritesService {
   @override
   Future<String> remove(String userId, String bookUrl) async {
     try {
-      print("removing book");
       var snapshot = await _firebaseFirestore
           .collection('favorites')
           .doc(userId)
@@ -57,7 +55,6 @@ class FavoritesService extends BaseFavoritesService {
         .snapshots()
         .map(
           (list) => list.docs.map((e) {
-            print(e.data());
             return e.data()['book_url'].toString();
           }).toList(),
         );

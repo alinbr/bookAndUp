@@ -1,4 +1,3 @@
-import 'package:books_app_up/presentation/screens/register_screen.dart';
 import 'package:books_app_up/presentation/widgets/core/auth_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
