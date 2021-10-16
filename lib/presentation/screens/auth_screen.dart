@@ -1,22 +1,24 @@
 import 'package:books_app_up/application/auth/auth_controller.dart';
 import 'package:books_app_up/presentation/widgets/auth/field_wrapper.dart';
-import 'package:books_app_up/presentation/widgets/auth/my_sign_in_button.dart';
+import 'package:books_app_up/presentation/widgets/auth/google_sign_in_button.dart';
+import 'package:books_app_up/presentation/widgets/auth/login/login_footer.dart';
+import 'package:books_app_up/presentation/widgets/auth/login/login_header.dart';
+import 'package:books_app_up/presentation/widgets/auth/action_button.dart';
 import 'package:books_app_up/presentation/widgets/auth/or_divider.dart';
-import 'package:books_app_up/presentation/widgets/auth/register_footer.dart';
+import 'package:books_app_up/presentation/widgets/auth/registration/registration_footer.dart';
+import 'package:books_app_up/presentation/widgets/auth/registration/registration_header.dart';
 import 'package:books_app_up/presentation/widgets/core/auth_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
 
-class RegisterScreen extends ConsumerStatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+class AuthScreen extends ConsumerStatefulWidget {
+  const AuthScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _RegisterScreenState extends ConsumerState<RegisterScreen> {
+class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _passwordController = TextEditingController();
@@ -31,6 +33,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authMode = ref.watch(authModeProvider);
+
     return Scaffold(
       backgroundColor: const Color(0xffEEECF4),
       body: SingleChildScrollView(
@@ -47,54 +51,27 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                ),
-                Text(
-                  "Hello!",
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Let's get you started!",
-                  style: Theme.of(context).textTheme.headline6,
-                ),
+                if (authMode.state == AuthMode.login) const LoginHeader(),
+                if (authMode.state == AuthMode.registration)
+                  const RegistrationHeader(),
                 const SizedBox(height: 24),
                 _buildEmailField(context),
                 _buildPasswordField(context),
-                _buildRepeatPassField(context),
-                _buildRegisterButton(context),
-                const OrDivider(),
-                const SizedBox(height: 32),
-                SignInButton(
-                  Buttons.Google,
-                  text: "Register with Google",
+                if (authMode.state == AuthMode.registration)
+                  _buildRepeatPassField(context, authMode.state),
+                ActionButton(
+                  text:
+                      authMode.state == AuthMode.login ? "Sign in" : "Register",
                   onPressed: () async {
-                    String msg =
-                        await ref.read(authProvider).signInWithGoogle();
-
-                    if (msg == "Signed in") {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AuthWrapper(),
-                          ));
-                    } else {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(msg)),
-                      );
-                    }
-
-                    return;
+                    await authenticateUser(context, authMode.state);
                   },
-                  elevation: 6,
-                  padding: const EdgeInsets.all(8),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
                 ),
+                const OrDivider(),
+                const GoogleSignInButton(),
                 const Spacer(),
-                const RegisterFooter()
+                if (authMode.state == AuthMode.login) const LoginFooter(),
+                if (authMode.state == AuthMode.registration)
+                  const RegistrationFooter(),
               ],
             ),
           ),
@@ -103,47 +80,42 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
   }
 
-  Widget _buildRegisterButton(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 32),
-      child: MySignInButton(
-        text: "Register",
-        onPressed: () async {
-          if (_formKey.currentState!.validate()) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Creating your account')),
-            );
+  Future<void> authenticateUser(BuildContext context, AuthMode authMode) async {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(authMode == AuthMode.registration
+                ? 'Creating your account..'
+                : 'Logging you in..')),
+      );
 
-            String msg = await ref
-                .read(authProvider)
-                .signUpWithEmailAndPassword(
-                    _emailController.text, _passwordController.text);
+      String msg = authMode == AuthMode.registration
+          ? await ref.read(authProvider).signUpWithEmailAndPassword(
+              _emailController.text, _passwordController.text)
+          : await ref.read(authProvider).signInWithEmailAndPassword(
+              _emailController.text, _passwordController.text);
 
-            if (msg == "Signed up") {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AuthWrapper(),
-                  ));
-            } else {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(msg)),
-              );
-            }
-
-            return;
-          }
-        },
-      ),
-    );
+      if (msg == "Signed up" || msg == "Signed in") {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AuthWrapper(),
+            ));
+      } else {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg)),
+        );
+      }
+    }
   }
 
-  Widget _buildRepeatPassField(BuildContext context) {
+  Widget _buildRepeatPassField(BuildContext context, AuthMode authMode) {
     return FieldWrapper(
       textFormField: TextFormField(
         validator: (value) {
-          if (value != _passwordController.text) {
+          if (authMode == AuthMode.registration &&
+              value != _passwordController.text) {
             return "Passwords does not match!";
           }
           return null;

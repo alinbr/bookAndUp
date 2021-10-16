@@ -10,3 +10,11 @@ final authProvider = Provider<BaseAuthService>(
 
 final authStateProvider = StreamProvider<User?>(
     (ref) => ref.watch(firebaseAuthProvider).authStateChanges());
+
+enum AuthMode {
+  login,
+  registration,
+}
+
+final authModeProvider =
+    StateProvider<AuthMode>((ref) => AuthMode.registration);

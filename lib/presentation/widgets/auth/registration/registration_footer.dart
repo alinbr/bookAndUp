@@ -1,11 +1,12 @@
-import 'package:books_app_up/presentation/screens/login_screen.dart';
+import 'package:books_app_up/application/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RegisterFooter extends StatelessWidget {
-  const RegisterFooter({Key? key}) : super(key: key);
+class RegistrationFooter extends ConsumerWidget {
+  const RegistrationFooter({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 24.0),
       child: Row(
@@ -14,11 +15,7 @@ class RegisterFooter extends StatelessWidget {
           const Text('Already a member?'),
           TextButton(
               onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
-                    ));
+                ref.read(authModeProvider).state = AuthMode.login;
               },
               child: const Text("Login instead!"))
         ],

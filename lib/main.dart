@@ -1,4 +1,4 @@
-import 'package:books_app_up/presentation/widgets/core/auth_wrapper.dart';
+import 'package:books_app_up/presentation/screens/auth_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +18,6 @@ class MyApp extends StatelessWidget {
         title: 'Books App and Up',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(),
-        home: const AuthWrapper());
+        home: const AuthScreen());
   }
 }
